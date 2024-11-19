@@ -14,11 +14,10 @@ import {
 	LanguageModelV1ToolResultPart,
 	UnsupportedFunctionalityError,
 } from '@ai-sdk/provider';
-import { WebLLMModelId } from '../types';
+import { WebLLMModelId, WebLLMChatLanguageModelOpts } from '../types';
 import {
 	ChatCompletionMessageParam,
 	MLCEngine,
-	MLCEngineConfig,
 	ResponseFormat,
 } from '@mlc-ai/web-llm';
 
@@ -57,18 +56,20 @@ export class WebLLMChatLanguageModel implements LanguageModelV1 {
 	readonly supportsStructuredOutputs = false;
 
 	private engine!: MLCEngine;
+	private options: WebLLMChatLanguageModelOpts;
 
-	constructor(modelId: WebLLMModelId, options = {}) {
-		this.modelId = modelId;
+	constructor(
+		modelId?: WebLLMModelId,
+		options: WebLLMChatLanguageModelOpts = {}
+	) {
+		this.modelId = modelId ?? 'phi-1_5-q4f16_1-MLC';
+		this.options = options;
 	}
 
-	private getEngine = async (config?: MLCEngineConfig): Promise<MLCEngine> => {
+	private getEngine = async (): Promise<MLCEngine> => {
 		if (this.engine) return this.engine;
 		debug('Loading engine...');
-		const engine = new MLCEngine({
-			...config,
-			initProgressCallback: (p) => console.log(p),
-		});
+		const engine = new MLCEngine(this.options);
 		await engine.reload(this.modelId);
 		debug('Engine loaded');
 		this.engine = engine;

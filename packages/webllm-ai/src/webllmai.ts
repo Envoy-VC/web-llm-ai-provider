@@ -1,11 +1,35 @@
-import { WebLLMModelId } from './types';
+import { WebLLMModelId, WebLLMChatLanguageModelOpts } from './types';
 import { WebLLMChatLanguageModel } from './language-model';
 
 import createDebug from 'debug';
+import { ProviderV1 } from '@ai-sdk/provider';
 
 const debug = createDebug('webllm-ai');
 
-export function webllmai(modelId?: WebLLMModelId): WebLLMChatLanguageModel;
-export function webllmai(modelId: unknown = 'phi-1_5-q4f16_1-MLC-1k') {
-	return new WebLLMChatLanguageModel(modelId as WebLLMModelId);
+export interface WebLLMProvider extends ProviderV1 {
+	languageModel(): WebLLMChatLanguageModel;
 }
+
+export const createWebLLM = (
+	modelId?: WebLLMModelId,
+	options?: WebLLMChatLanguageModelOpts
+): WebLLMProvider => {
+	const createLanguageModel = () => {
+		return new WebLLMChatLanguageModel(modelId, options);
+	};
+
+	const textEmbeddingModel = () => {
+		throw new Error('Not implemented');
+	};
+
+	const provider = function () {
+		return createLanguageModel();
+	};
+
+	provider.languageModel = createLanguageModel;
+	provider.textEmbeddingModel = textEmbeddingModel;
+
+	return provider as WebLLMProvider;
+};
+
+export const webllmai = createWebLLM();
