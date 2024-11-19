@@ -30,26 +30,6 @@ import {
 
 const debug = createDebug('webllm-ai');
 
-type ContentType =
-	| string
-	| (LanguageModelV1TextPart | LanguageModelV1ImagePart)[]
-	| (LanguageModelV1TextPart | LanguageModelV1ToolCallPart)[]
-	| LanguageModelV1ToolResultPart[];
-
-function getStringContent(content: ContentType): string {
-	if (typeof content === 'string') {
-		return content.trim();
-	} else if (Array.isArray(content) && content.length > 0) {
-		const [first] = content;
-		if (first.type !== 'text') {
-			throw new UnsupportedFunctionalityError({ functionality: 'toolCall' });
-		}
-		return first.text.trim();
-	} else {
-		return '';
-	}
-}
-
 export class WebLLMChatLanguageModel implements LanguageModelV1 {
 	readonly specificationVersion = 'v1';
 	readonly defaultObjectGenerationMode = undefined;
@@ -100,6 +80,7 @@ export class WebLLMChatLanguageModel implements LanguageModelV1 {
 		warnings: Array<LanguageModelV1CallWarning>;
 		rawPrompt: string;
 	} {
+		console.log(mode);
 		const type = mode.type === 'regular' ? 'text' : 'json_object';
 		const schema =
 			mode.type === 'object-json' ? JSON.stringify(mode.schema) : undefined;
@@ -255,6 +236,8 @@ export class WebLLMChatLanguageModel implements LanguageModelV1 {
 		options: Parameters<LanguageModelV1['doStream']>[0]
 	): Promise<Awaited<ReturnType<LanguageModelV1['doStream']>>> {
 		const { args, warnings, rawPrompt } = this.getArgs(options);
+
+		console.log(args);
 
 		const engine = await this.getEngine();
 

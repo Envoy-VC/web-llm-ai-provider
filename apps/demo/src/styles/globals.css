@@ -75,3 +75,14 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.output-container pre {
+  word-wrap: break-word; /* Ensure long words wrap to the next line */
+  word-break: break-word; /* Ensure breaks happen at appropriate places */
+  overflow-wrap: break-word; /* Modern equivalent for better compatibility */
+  overflow-x: scroll;
+  background-color: #dadce0 !important;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+}
