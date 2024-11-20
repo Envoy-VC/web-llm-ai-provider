@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 const webllmai = createWebLLM('Llama-3.1-8B-Instruct-q4f16_1-MLC', {
   initProgressCallback: (p) => console.log(p),
+  worker: true,
 });
 
 const webllmLanguageModel = webllmai.languageModel();
