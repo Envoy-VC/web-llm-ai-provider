@@ -33,18 +33,15 @@ const debug = createDebug('webllm-ai');
 export class WebLLMChatLanguageModel implements LanguageModelV1 {
 	readonly specificationVersion = 'v1';
 	readonly defaultObjectGenerationMode = undefined;
-	readonly modelId: WebLLMModelId = 'phi-1_5-q4f16_1-MLC-1k';
+	readonly modelId: string = WebLLMModelId['phi-1_5-q4f16_1-MLC'];
 	readonly provider: string = 'webllm';
 
 	private engine!: MLCEngine | WebWorkerMLCEngine;
 	private readonly options: WebLLMChatLanguageModelOpts;
 	private readonly settings: WebLLMChatLanguageModelOpts['generationOptions'];
 
-	constructor(
-		modelId?: WebLLMModelId,
-		options: WebLLMChatLanguageModelOpts = {}
-	) {
-		this.modelId = modelId ?? 'phi-1_5-q4f16_1-MLC';
+	constructor(modelId?: string, options: WebLLMChatLanguageModelOpts = {}) {
+		this.modelId = modelId ?? WebLLMModelId['phi-1_5-q4f16_1-MLC'];
 		this.options = options;
 		this.settings = options.generationOptions;
 	}

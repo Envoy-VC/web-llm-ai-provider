@@ -40,7 +40,7 @@ export function convertToWebLLMChatMessages({
 											? part.image.toString()
 											: `data:${
 													part.mimeType ?? 'image/jpeg'
-											  };base64,${convertUint8ArrayToBase64(part.image)}`,
+												};base64,${convertUint8ArrayToBase64(part.image)}`,
 
 									// WebLLM specific extension: image detail
 									detail:

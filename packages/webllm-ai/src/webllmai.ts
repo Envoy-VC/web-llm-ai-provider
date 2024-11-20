@@ -1,4 +1,4 @@
-import { WebLLMModelId, WebLLMChatLanguageModelOpts } from './types';
+import { WebLLMChatLanguageModelOpts } from './types';
 import { WebLLMChatLanguageModel } from './language-model';
 
 import createDebug from 'debug';
@@ -11,7 +11,7 @@ export interface WebLLMProvider extends ProviderV1 {
 }
 
 export const createWebLLM = (
-	modelId?: WebLLMModelId,
+	modelId?: string,
 	options?: WebLLMChatLanguageModelOpts
 ): WebLLMProvider => {
 	const createLanguageModel = () => {
